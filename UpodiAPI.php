@@ -232,19 +232,3 @@ class UpodiAPI
     }
 
 }
-
-/***
- * Usage Examples
- */
-$api = new UpodiAPI([
-    'access_key' => '',
-    'api_version' => 'v3',
-]);
-
-
-print "<pre>";
-print_r($api->get('/endpoint'));
-print_r($api->delete('/endpoint'));
-print_r($api->post('/endpoint', array()));
-print_r($api->patch('/endpoint', array()));
-print "</pre>";
