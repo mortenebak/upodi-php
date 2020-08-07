@@ -13,7 +13,7 @@ $api = new UpodiAPI([
 
 $api->get('/endpoint');
 $api->delete('/endpoint');
-$api->post('/endpoint', array());
-$api->patch('/endpoint', array());
+$api->post('/endpoint', []);
+$api->patch('/endpoint', []);
 
 ```

@@ -105,7 +105,6 @@ class UpodiAPI
         $this->request_method = self::METHOD_GET;
         $this->endpoint = $endpoint;
         $this->performRequest();
-        return $this;
     }
 
     /**
@@ -120,7 +119,6 @@ class UpodiAPI
         $this->endpoint = $endpoint;
         $this->post_data = $data;
         $this->performRequest();
-        return $this;
     }
 
     /**
@@ -133,11 +131,10 @@ class UpodiAPI
         $this->request_method = self::METHOD_DELETE;
         $this->endpoint = $endpoint;
         $this->performRequest();
-        return $this;
     }
 
     /**
-     * @param $endpoint string The endpoint as a string - omit first "/"
+     * @param $endpoint string The endpoint as a string with leading "/"
      * @param $data array
      * @return $this
      * @throws Exception
@@ -148,7 +145,6 @@ class UpodiAPI
         $this->endpoint = $endpoint;
         $this->post_data = $data;
         $this->performRequest();
-        return $this;
     }
 
     /**
@@ -199,7 +195,7 @@ class UpodiAPI
             }
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => $this->api_url . $this->api_version . "/" . $this->endpoint,
+                CURLOPT_URL => $this->api_url . $this->api_version . $this->endpoint,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
