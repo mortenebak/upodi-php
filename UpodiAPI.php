@@ -91,7 +91,7 @@ class UpodiAPI
     private function buildAuthHeader()
     {
 
-        return "Authorization: bearer " . base64_encode($this->access_key);
+        return "Authorization: Bearer " . base64_encode($this->access_key);
 
     }
 
@@ -104,7 +104,7 @@ class UpodiAPI
     {
         $this->request_method = self::METHOD_GET;
         $this->endpoint = $endpoint;
-        $this->performRequest();
+        return $this->performRequest();
     }
 
     /**
@@ -118,7 +118,7 @@ class UpodiAPI
         $this->request_method = self::METHOD_POST;
         $this->endpoint = $endpoint;
         $this->post_data = $data;
-        $this->performRequest();
+        return $this->performRequest();
     }
 
     /**
@@ -130,21 +130,35 @@ class UpodiAPI
     {
         $this->request_method = self::METHOD_DELETE;
         $this->endpoint = $endpoint;
-        $this->performRequest();
+        return $this->performRequest();
     }
 
     /**
      * @param $endpoint string The endpoint as a string with leading "/"
-     * @param $data array
+     * @param $data
      * @return $this
      * @throws Exception
      */
-    public function patch($endpoint, array $data)
+    public function patch($endpoint, $data)
     {
         $this->request_method = self::METHOD_PATCH;
         $this->endpoint = $endpoint;
         $this->post_data = $data;
-        $this->performRequest();
+        return $this->performRequest();
+    }
+
+    /**
+     * @param $endpoint string The endpoint as a string with leading "/"
+     * @param $data
+     * @return $this
+     * @throws Exception
+     */
+    public function put($endpoint, $data)
+    {
+        $this->request_method = self::METHOD_PUT;
+        $this->endpoint = $endpoint;
+        $this->post_data = $data;
+        return $this->performRequest();
     }
 
     /**
@@ -162,14 +176,14 @@ class UpodiAPI
      */
     private function performRequest()
     {
-
+        $data = "";
         try {
-
 
             $curl = curl_init($this->endpoint);
             $method = trim(strtoupper($this->request_method));
 
             $headers = [
+                "Accept: application/json",
                 'Content-Type: application/json',
                 $this->buildAuthHeader(),
             ];
@@ -217,9 +231,15 @@ class UpodiAPI
                 throw new \Exception(curl_error($curl));
             }
 
-            $data = json_decode($response);
+            $data = json_decode($response, true);
+
+            // Check if json_decoded data is empty, if it is, return the raw response instead.
+            if(empty($data)) {
+                $data = $response;
+            }
 
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             die($e->getMessage());
         }
 
